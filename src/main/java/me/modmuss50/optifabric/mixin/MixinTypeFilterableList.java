@@ -18,10 +18,6 @@ public abstract class MixinTypeFilterableList<T> {
 
     @Shadow @Final private Map<Class<?>, List<T>> elementsByType;
 
-    @Shadow protected abstract Class<?> method_10805(Class<?> var1);
-
-    @Shadow @Final private List<T> allElements;
-
     /**
      * @author hydos
      */
@@ -43,7 +39,7 @@ public abstract class MixinTypeFilterableList<T> {
      */
     @Overwrite
     public Iterator<T> iterator() {
-        return allElements.isEmpty() ? Collections.emptyIterator() : Iterators.unmodifiableIterator(allElements.iterator());
+        return all.isEmpty() ? Collections.emptyIterator() : Iterators.unmodifiableIterator(allElements.iterator());
     }
 
 }
