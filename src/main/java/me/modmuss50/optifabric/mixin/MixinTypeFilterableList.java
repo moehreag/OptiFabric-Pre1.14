@@ -1,3 +1,4 @@
+/*
 package me.modmuss50.optifabric.mixin;
 
 import com.google.common.collect.Iterators;
@@ -20,7 +21,7 @@ public abstract class MixinTypeFilterableList<T> {
 
     /**
      * @author hydos
-     */
+     *\/
     @Overwrite
     public <S> Iterable<S> method_10806(final Class<S> var1) {
         return () -> {
@@ -36,10 +37,11 @@ public abstract class MixinTypeFilterableList<T> {
 
     /**
      * @author hydos
-     */
+     *\/
     @Overwrite
     public Iterator<T> iterator() {
         return all.isEmpty() ? Collections.emptyIterator() : Iterators.unmodifiableIterator(allElements.iterator());
     }
 
 }
+*/
