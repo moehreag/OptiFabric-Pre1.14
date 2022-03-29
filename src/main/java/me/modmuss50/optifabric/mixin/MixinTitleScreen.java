@@ -18,15 +18,15 @@ public abstract class MixinTitleScreen extends Screen {
 		super();
 	}
 
-	@Inject(method = "init", at = @At("RETURN"))
+	@Inject(method = "method_21947", at = @At("RETURN"))
 	private void init(CallbackInfo info) {
 		Optifabric.checkForErrors();
 	}
 
-	@Inject(method = "render", at = @At("RETURN"))
+	@Inject(method = "method_21925", at = @At("RETURN"))
 	private void render(int int_1, int int_2, float float_1, CallbackInfo info) {
 		if (!OptifabricError.hasError()) {
-			this.drawWithShadow(MinecraftClient.getInstance().textRenderer, OptifineVersion.version, 2, this.height - 20, 0xFFFFFFFF);
+			this.method_21884(MinecraftClient.getInstance().textRenderer, OptifineVersion.version, 2, this.field_22536 - 20, 0xFFFFFFFF);
 		}
 	}
 }

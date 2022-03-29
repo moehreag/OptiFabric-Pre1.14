@@ -16,7 +16,6 @@ import net.fabricmc.mapping.reader.v2.TinyMetadata;
 import net.fabricmc.mapping.tree.ClassDef;
 import net.fabricmc.mapping.tree.TinyTree;
 import net.fabricmc.tinyremapper.IMappingProvider;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.zeroturnaround.zip.ZipUtil;
@@ -26,6 +25,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -300,9 +300,22 @@ public class OptifineSetup {
 		}
 	}
 
-	byte[] fileHash(File input) throws IOException {
-		try (InputStream is = new FileInputStream(input)) {
-			return DigestUtils.md5(is);
+	byte[] fileHash(File input) throws Exception {
+		try (InputStream fis = new FileInputStream(input)) {
+
+			byte[] buffer = new byte[1024];
+			MessageDigest complete = MessageDigest.getInstance("MD5");
+			int numRead;
+
+			do {
+				numRead = fis.read(buffer);
+				if (numRead > 0) {
+					complete.update(buffer, 0, numRead);
+				}
+			} while (numRead != -1);
+
+			fis.close();
+			return complete.digest();
 		}
 	}
 }
