@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinReflectorClass {
 
 	@Shadow
-	private String targetClassName;
+	private String[] targetClassNames;
 
 	@Shadow
 	private boolean checked;
@@ -22,9 +22,12 @@ public class MixinReflectorClass {
 	@Inject(method = "getTargetClass", at = @At("HEAD"), cancellable = true, remap = false)
 	private void getTargetClass(CallbackInfoReturnable<Class<?>> infoReturnable) {
 		if (!checked) {//Only check the target if it hasn't been done yet
-			String name = targetClassName.replaceAll("/", ".");
-			if (name.startsWith("net.minecraft.launchwrapper") || name.startsWith("net.minecraftforge") || "optifine.OptiFineClassTransformer".equals(name)) {
-				checked = true;
+			for (String targetClassName : targetClassNames) {
+				String name = targetClassName.replaceAll("/", ".");
+				if (name.startsWith("net.minecraft.launchwrapper") || name.startsWith("net.minecraftforge") || "optifine.OptiFineClassTransformer".equals(name)) {
+					checked = true;
+					break;
+				}
 			}
 		}
 	}
