@@ -2,7 +2,7 @@
 //file:noinspection GradlePackageUpdate
 
 plugins {
-	id 'fabric-loom' version "0.7-SNAPSHOT" // To use chocoloom, change the version to a commit hash
+	id 'fabric-loom' version '0.12-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -22,13 +22,9 @@ repositories {
 	maven { url 'https://jitpack.io' }
 }
 
-// Comment out this block if you're using Chocoloom
-// Comment when using loom 0.10
-minecraft {
-	accessWidener = file("src/main/resources/optifabric.accesswidener")
-	intermediaryUrl = {
-		return "https://maven.legacyfabric.net/net/fabricmc/intermediary/" + it + "/intermediary-" + it + "-v2.jar"
-	}
+loom {
+	setIntermediaryUrl('https://maven.legacyfabric.net/net/fabricmc/intermediary/%1$s/intermediary-%1$s-v2.jar');
+	accessWidenerPath = file("src/main/resources/optifabric.accesswidener")
 }
 
 dependencies {
@@ -36,12 +32,12 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	compile 'com.google.guava:guava:23.5-jre'
-	modCompile "com.github.Chocohead:Fabric-ASM:${project.fabric_asm_version}"
+	implementation 'com.google.guava:guava:23.5-jre'
+	modImplementation "com.github.Chocohead:Fabric-ASM:${project.fabric_asm_version}"
 	include "com.github.Chocohead:Fabric-ASM:${project.fabric_asm_version}"
 
 	//Used to handle the zip processing
-	compile "org.zeroturnaround:zt-zip:${project.zt_zip_version}"
+	implementation "org.zeroturnaround:zt-zip:${project.zt_zip_version}"
 	include "org.zeroturnaround:zt-zip:${project.zt_zip_version}"
 
 	//Required for zt-zip, kinda annoying
