@@ -62,7 +62,7 @@ public class OptifineVersion {
 	private static JarType getJarType(File file) throws IOException {
 		ClassNode classNode;
 		try (JarFile jarFile = new JarFile(file)) {
-			JarEntry jarEntry = jarFile.getJarEntry("Config.class"); // Pre 1.14.3 location
+			JarEntry jarEntry = jarFile.getJarEntry("net/optifine/Config.class");
 			if (jarEntry == null) {
 				return JarType.SOMETHINGELSE;
 			}
@@ -82,7 +82,7 @@ public class OptifineVersion {
 			return JarType.INCOMPATIBE;
 		}
 
-		String currentMcVersion = "1.12.2";
+		String currentMcVersion = "1.13.2";
 
 		if (!currentMcVersion.equals(minecraftVersion)) {
 			OptifabricError.setError(String.format("This version of optifine is not compatible with the current minecraft version\n\n Optifine requires %s you have %s", minecraftVersion, currentMcVersion));

@@ -35,6 +35,7 @@ public class RemapUtils {
 			outputConsumer.close();
 			remapper.finish();
 		} catch (Exception e) {
+			e.printStackTrace();
 			remapper.finish();
 			throw new RuntimeException("Failed to remap jar", e);
 		}
