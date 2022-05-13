@@ -82,7 +82,7 @@ public class OptifineVersion {
 			return JarType.INCOMPATIBE;
 		}
 
-		String currentMcVersion = "1.11.2";
+		String currentMcVersion = "1.12.2";
 
 		if (!currentMcVersion.equals(minecraftVersion)) {
 			OptifabricError.setError(String.format("This version of optifine is not compatible with the current minecraft version\n\n Optifine requires %s you have %s", minecraftVersion, currentMcVersion));
