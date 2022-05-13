@@ -24,6 +24,7 @@ public abstract class MixinTypeFilterableList<T> {
 
     /**
      * @author hydos
+     * @reason ??
      */
     @Overwrite
     public <S> Iterable<S> method_10806(final Class<S> var1) {
@@ -40,6 +41,7 @@ public abstract class MixinTypeFilterableList<T> {
 
     /**
      * @author hydos
+     * @reason ??
      */
     @Overwrite
     public Iterator<T> iterator() {

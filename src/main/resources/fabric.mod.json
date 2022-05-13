@@ -8,7 +8,8 @@
   "authors": [
     "Modmuss50",
     "Chocohead",
-    "Hydos"
+    "Hydos",
+    "RedLime"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
@@ -33,7 +34,7 @@
   },
   "depends": {
     "fabricloader": ">=0.12.2",
-    "minecraft": ">=1.8.9"
+    "minecraft": "1.9.x"
   },
   "accessWidener": "optifabric.accesswidener"
 }
