@@ -14,20 +14,18 @@ import java.util.List;
 @Mixin(GameOptions.class)
 public class MixinGameOptions {
 
-	@Shadow public List<String> resourcePacks;
-
 	@Shadow private File optionsFile;
 
-	@SuppressWarnings({"ResultOfMethodCallIgnored", "UnresolvedMixinReference"})
-	@Inject(method = "method_865", remap = false, at = @At("RETURN")) //method_865 = load
+	@SuppressWarnings("ResultOfMethodCallIgnored")
+	@Inject(method = "load", remap = false, at = @At("RETURN")) //method_865 = load
 	private void load(CallbackInfo info) {
 		File optifabricOptions = new File(optionsFile.getParent(), "optifabric.txt");
 		if (!optifabricOptions.exists()) {
 
 			//Add optifine to resource packs if optifabric.txt doesnt exist, makes it default on, but can be disabled.
-			if (!resourcePacks.contains("optifine")) {
-				resourcePacks.add("optifine");
-			}
+//			if (!resourcePacks.contains("optifine")) {
+//				resourcePacks.add("optifine");
+//			}
 
 			try {
 				optifabricOptions.createNewFile();
