@@ -16,12 +16,12 @@ public class MixinGameOptions {
 
 	@Shadow public List<String> resourcePacks;
 
-	@Shadow private File optionsFile;
+	@Shadow private File file;
 
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	@Inject(method = "load", at = @At("RETURN")) //method_2336 = load
 	private void load(CallbackInfo info) {
-		File optifabricOptions = new File(optionsFile.getParent(), "optifabric.txt");
+		File optifabricOptions = new File(file.getParent(), "optifabric.txt");
 		if (!optifabricOptions.exists()) {
 
 			//Add optifine to resource packs if optifabric.txt doesnt exist, makes it default on, but can be disabled.

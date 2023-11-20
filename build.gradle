@@ -2,8 +2,9 @@
 //file:noinspection GradlePackageUpdate
 
 plugins {
-	id 'fabric-loom' version "0.7-SNAPSHOT" // To use chocoloom, change the version to a commit hash
+	id 'fabric-loom' version "1.4-SNAPSHOT" // To use chocoloom, change the version to a commit hash
 	id 'maven-publish'
+	id 'ploceus' version "1.4-SNAPSHOT"
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -24,16 +25,19 @@ repositories {
 
 // Comment out this block if you're using Chocoloom
 // Comment when using loom 0.10
-minecraft {
-	accessWidener = file("src/main/resources/optifabric.accesswidener")
-	intermediaryUrl = {
-		return "https://maven.legacyfabric.net/net/fabricmc/intermediary/" + it + "/intermediary-" + it + "-v2.jar"
+loom {
+	accessWidenerPath.set(file("src/main/resources/optifabric.accesswidener"))
+
+	mods {
+		"optifabric" {
+			sourceSet("main")
+		}
 	}
 }
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	mappings "net.ornithemc:feather:${project.mappings}"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	implementation 'com.google.guava:guava:23.5-jre'

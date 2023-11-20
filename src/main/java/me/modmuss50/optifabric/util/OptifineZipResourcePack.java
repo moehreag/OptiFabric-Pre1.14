@@ -1,12 +1,12 @@
 package me.modmuss50.optifabric.util;
 
-import net.minecraft.resource.ResourcePack;
-import net.minecraft.resource.ZipResourcePack;
-
 import java.io.File;
 import java.util.function.Supplier;
 
-public class OptifineZipResourcePack extends ZipResourcePack {
+import net.minecraft.client.resource.pack.ResourcePack;
+import net.minecraft.client.resource.pack.ZippedResourcePack;
+
+public class OptifineZipResourcePack extends ZippedResourcePack {
 	public OptifineZipResourcePack(File file) {
 		super(file);
 	}

@@ -27,6 +27,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -227,6 +228,11 @@ public class OptifineSetup {
 		Path minecraftJar = getLaunchMinecraftJar();
 
 		if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+
+			if (Files.isRegularFile(minecraftJar, LinkOption.NOFOLLOW_LINKS)){
+				return minecraftJar;
+			}
+
 			Path officialNames = minecraftJar.resolveSibling(String.format("minecraft-%s-client.jar", OptifineVersion.minecraftVersion));
 
 			if (Files.notExists(officialNames)) {
