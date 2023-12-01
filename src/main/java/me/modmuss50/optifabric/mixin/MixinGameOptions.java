@@ -1,5 +1,6 @@
 package me.modmuss50.optifabric.mixin;
 
+import me.modmuss50.optifabric.mod.Optifabric;
 import net.minecraft.client.options.GameOptions;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,8 +19,8 @@ public class MixinGameOptions {
 
 	@Shadow private File file;
 
-	@SuppressWarnings("ResultOfMethodCallIgnored")
-	@Inject(method = "load", at = @At("RETURN")) //method_2336 = load
+	@SuppressWarnings({"ResultOfMethodCallIgnored", "UnresolvedMixinReference"})
+	@Inject(method = "m_2009088", at = @At("RETURN"), remap = false) //m_2009088 = load
 	private void load(CallbackInfo info) {
 		File optifabricOptions = new File(file.getParent(), "optifabric.txt");
 		if (!optifabricOptions.exists()) {
@@ -32,7 +33,7 @@ public class MixinGameOptions {
 			try {
 				optifabricOptions.createNewFile();
 			} catch (IOException e) {
-				e.printStackTrace();
+				Optifabric.getLogger().get().error("Error while creating options file:", e);
 			}
 		}
 	}

@@ -39,7 +39,7 @@ public class OptifineInjector {
 	public final Consumer<ClassNode> transformer = target -> {
 
 		if(patched.contains(target.name)) {
-			System.out.println("Already patched" + target.name);
+			Optifabric.getLogger().info("Already patched: " + target.name);
 			return;
 		}
 		patched.add(target.name);

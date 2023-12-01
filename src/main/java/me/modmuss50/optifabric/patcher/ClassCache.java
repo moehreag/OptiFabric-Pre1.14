@@ -1,14 +1,16 @@
 package me.modmuss50.optifabric.patcher;
 
-import org.apache.commons.lang3.Validate;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+
+import org.apache.commons.lang3.Validate;
 
 public class ClassCache {
 
@@ -22,19 +24,19 @@ public class ClassCache {
 	private ClassCache() {
 	}
 
-	public void addClass(String name, byte[] bytes){
-		if(classes.containsKey(name)){
+	public void addClass(String name, byte[] bytes) {
+		if (classes.containsKey(name)) {
 			throw new UnsupportedOperationException(name + " is already in ClassCache");
 		}
 		Validate.notNull(bytes, "bytes cannot be null");
 		classes.put(name, bytes);
 	}
 
-	public byte[] getClass(String name){
+	public byte[] getClass(String name) {
 		return classes.get(name);
 	}
 
-	public byte[] getAndRemove(String name){
+	public byte[] getAndRemove(String name) {
 		byte[] bytes = getClass(name);
 		classes.remove(name);
 		return bytes;
@@ -44,13 +46,13 @@ public class ClassCache {
 		return hash;
 	}
 
-	public Set<String> getClasses(){
+	public Set<String> getClasses() {
 		return classes.keySet();
 	}
 
-	public static ClassCache read(File input) throws IOException {
-		FileInputStream fis = new FileInputStream(input);
-		GZIPInputStream gis = new GZIPInputStream(fis);
+	public static ClassCache read(Path input) throws IOException {
+		InputStream in = Files.newInputStream(input);
+		GZIPInputStream gis = new GZIPInputStream(in);
 		DataInputStream dis = new DataInputStream(gis);
 
 		ClassCache classCache = new ClassCache();
@@ -76,16 +78,16 @@ public class ClassCache {
 
 		dis.close();
 		gis.close();
-		fis.close();
+		in.close();
 		return classCache;
 	}
 
-	public void save(File output) throws IOException {
-		if(output.exists()){
-			output.delete();
+	public void save(Path output) throws IOException {
+		if (Files.exists(output)) {
+			Files.delete(output);
 		}
-		FileOutputStream fos = new FileOutputStream(output);
-		GZIPOutputStream gos = new GZIPOutputStream(fos);
+		OutputStream out = Files.newOutputStream(output);
+		GZIPOutputStream gos = new GZIPOutputStream(out);
 		DataOutputStream dos = new DataOutputStream(gos);
 
 		//Write the hash
@@ -94,7 +96,7 @@ public class ClassCache {
 
 		//Write the number of classes
 		dos.writeInt(classes.size());
-		for(Map.Entry<String, byte[]> clazz : classes.entrySet()){
+		for (Map.Entry<String, byte[]> clazz : classes.entrySet()) {
 			String name = clazz.getKey();
 			byte[] nameBytes = name.getBytes(StandardCharsets.UTF_8);
 			byte[] bytes = clazz.getValue();
@@ -111,8 +113,8 @@ public class ClassCache {
 		dos.close();
 		gos.flush();
 		gos.close();
-		fos.flush();
-		fos.close();
+		out.flush();
+		out.close();
 	}
 
 }

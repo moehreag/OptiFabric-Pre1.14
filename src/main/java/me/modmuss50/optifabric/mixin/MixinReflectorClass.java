@@ -12,14 +12,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(targets = "net.optifine.reflect.ReflectorClass")
 public class MixinReflectorClass {
 
-	@Shadow
+	@Shadow(remap = false)
 	private String targetClassName;
 
-	@Shadow
+	@Shadow(remap = false)
 	private boolean checked;
 
 	@SuppressWarnings("UnresolvedMixinReference")
-	@Inject(method = "getTargetClass", at = @At("HEAD"), cancellable = true, remap = false)
+	@Inject(method = "getTargetClass", at = @At("HEAD"), remap = false)
 	private void getTargetClass(CallbackInfoReturnable<Class<?>> infoReturnable) {
 		if (!checked) {//Only check the target if it hasn't been done yet
 			String name = targetClassName.replaceAll("/", ".");

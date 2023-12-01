@@ -13,8 +13,8 @@ import java.util.List;
 
 public class RemapUtils {
 
-	public static IMappingProvider getTinyRemapper(File mappings, String from, String to) {
-		return TinyUtils.createTinyMappingProvider(mappings.toPath(), from, to);
+	public static IMappingProvider getTinyRemapper(Path mappings, String from, String to) {
+		return TinyUtils.createTinyMappingProvider(mappings, from, to);
 	}
 
 	public static void mapJar(Path output, Path input, IMappingProvider mappings, List<Path> libraries) throws IOException {

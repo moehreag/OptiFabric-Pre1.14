@@ -1,39 +1,43 @@
 package me.modmuss50.optifabric.patcher;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
+
 import net.fabricmc.tinyremapper.IMappingProvider;
 import net.fabricmc.tinyremapper.MemberInstance;
+import org.apache.commons.io.IOUtils;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+public class LambadaRebuilder implements IMappingProvider {
 
-public class LambadaRebuiler implements IMappingProvider {
+	private Path optifineFile;
+	private Path minecraftClientFile;
 
-	private File optifineFile;
-	private File minecraftClientFile;
-
-	private JarFile optifineJar;
-	private JarFile clientJar;
+	private JarInputStream optifineJar;
+	private JarInputStream clientJar;
 
 	private Map<String, String> methodMap = new HashMap<>();
 	private List<String> usedMethods = new ArrayList<>(); //Used to prevent duplicates
 
-	public LambadaRebuiler(File optifineFile, File minecraftClientFile) throws IOException {
+	public LambadaRebuilder(Path optifineFile, Path minecraftClientFile) throws IOException {
 		this.optifineFile = optifineFile;
 		this.minecraftClientFile = minecraftClientFile;
-		optifineJar = new JarFile(optifineFile);
-		clientJar = new JarFile(minecraftClientFile);
+		optifineJar = new JarInputStream(Files.newInputStream(optifineFile));
+		clientJar = new JarInputStream(Files.newInputStream(minecraftClientFile));
 
 	}
 
 	public void buildLambadaMap() throws IOException {
-		Enumeration<JarEntry> entrys = optifineJar.entries();
-		while (entrys.hasMoreElements()) {
-			JarEntry entry = entrys.nextElement();
+		JarEntry entry;
+		while ((entry = optifineJar.getNextJarEntry()) != null) {
 			if (entry.getName().endsWith(".class") && !entry.getName().startsWith("net/") && !entry.getName().startsWith("optifine/") && !entry.getName().startsWith("javax/")) {
 				buildClassMap(entry);
 			}
@@ -43,7 +47,7 @@ public class LambadaRebuiler implements IMappingProvider {
 	}
 
 	private void buildClassMap(JarEntry jarEntry) throws IOException {
-		ClassNode classNode = ASMUtils.asClassNode(jarEntry, optifineJar);
+		ClassNode classNode = ASMUtils.readClassFromBytes(IOUtils.toByteArray(optifineJar));
 		List<MethodNode> lambadaNodes = new ArrayList<>();
 		for (MethodNode methodNode : classNode.methods) {
 			if (!methodNode.name.startsWith("lambda$") || methodNode.name.startsWith("lambda$static")) {
@@ -54,7 +58,7 @@ public class LambadaRebuiler implements IMappingProvider {
 		if (lambadaNodes.isEmpty()) {
 			return;
 		}
-		ClassNode minecraftClass = ASMUtils.asClassNode(clientJar.getJarEntry(jarEntry.getName()), clientJar);
+		ClassNode minecraftClass = ASMUtils.readClassFromBytes(IOUtils.toByteArray(clientJar));
 		if (!minecraftClass.name.equals(classNode.name)) {
 			throw new RuntimeException("Something went wrong");
 		}

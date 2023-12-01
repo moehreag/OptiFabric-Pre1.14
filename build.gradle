@@ -15,10 +15,6 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
-	maven {
-		name = "legacy-fabric"
-		url = "https://maven.legacyfabric.net"
-	}
 	mavenCentral()
 	maven { url 'https://jitpack.io' }
 }
@@ -43,14 +39,6 @@ dependencies {
 	implementation 'com.google.guava:guava:23.5-jre'
 	modImplementation "com.github.Chocohead:Fabric-ASM:${project.fabric_asm_version}"
 	include "com.github.Chocohead:Fabric-ASM:${project.fabric_asm_version}"
-
-	//Used to handle the zip processing
-	implementation "org.zeroturnaround:zt-zip:${project.zt_zip_version}"
-	include "org.zeroturnaround:zt-zip:${project.zt_zip_version}"
-
-	//Required for zt-zip, kinda annoying
-	include "org.slf4j:slf4j-simple:${project.slf4j_version}"
-	include "org.slf4j:slf4j-api:${project.slf4j_version}"
 
 	// Hacks that make mac os work
 	if (System.getProperty("os.name").toLowerCase().contains("mac")) {

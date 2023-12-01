@@ -1,5 +1,11 @@
 package me.modmuss50.optifabric.mod;
 
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+
 import com.chocohead.mm.api.ClassTinkerers;
 import me.modmuss50.optifabric.patcher.ClassCache;
 import net.fabricmc.loader.api.FabricLoader;
@@ -11,17 +17,11 @@ import net.fabricmc.loader.util.version.VersionParsingException;
 import org.apache.commons.lang3.tuple.Pair;
 import org.spongepowered.asm.mixin.Mixins;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
-
 @SuppressWarnings("unused")
 public class OptifabricSetup implements Runnable {
 
 	public static final String OPTIFABRIC_INCOMPATIBLE = "optifabric:incompatible";
-	public static File optifineRuntimeJar = null;
+	public static Path optifineRuntimeJar = null;
 
 	//This is called early on to allow us to get the transformers in beofore minecraft starts
 	@Override
@@ -31,10 +31,10 @@ public class OptifabricSetup implements Runnable {
 
 		try {
 			OptifineSetup optifineSetup = new OptifineSetup();
-			Pair<File, ClassCache> runtime = optifineSetup.getRuntime();
+			Pair<Path, ClassCache> runtime = optifineSetup.getRuntime();
 
 			//Add the optifine jar to the classpath, as
-			ClassTinkerers.addURL(runtime.getLeft().toURI().toURL());
+			ClassTinkerers.addURL(runtime.getLeft().toUri().toURL());
 
 			OptifineInjector injector = new OptifineInjector(runtime.getRight());
 			injector.setup();
