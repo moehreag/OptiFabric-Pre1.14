@@ -76,17 +76,7 @@ public class OptifineSetup {
 		if (OptifineVersion.jarType == OptifineVersion.JarType.OPTFINE_INSTALLER) {
 			Path optifineMod = versionDir.resolve("Optifine-mod.jar");
 			if (!Files.exists(optifineMod) || Files.size(optifineMod) == 0) {
-				Path edited = optifineMod.getParent().resolve("Optifine-edited.jar");
-				Files.copy(optifineModJar, edited, StandardCopyOption.REPLACE_EXISTING);
-				String[] filesToDelete = new String[]{"bpo"};
-				try (FileSystem zip = FileSystems.newFileSystem(edited, (ClassLoader) null)) {
-					for (String s : filesToDelete) {
-						Files.deleteIfExists(zip.getPath("patch/"+s+".class.xdelta"));
-						Files.deleteIfExists(zip.getPath("patch/"+s+".class.md5"));
-					}
-				}
-				OptifineInstaller.extract(edited, optifineMod, getMinecraftJar());
-				Files.deleteIfExists(edited);
+				OptifineInstaller.extract(optifineModJar, optifineMod, getMinecraftJar());
 			}
 			optifineModJar = optifineMod;
 		}
@@ -219,10 +209,6 @@ public class OptifineSetup {
 							"renderDistance_OF");
 					out.acceptField(new IMappingProvider.Member("bct", "id", "Ljava/lang/String;"),
 							"id_OF");
-					out.acceptField(new IMappingProvider.Member("bpo$1", "a", "Lbpo;"),
-							"server");
-					out.acceptField(new IMappingProvider.Member("bpo$2", "a", "Lbpo;"),
-							"server");
 				};
 			} catch (Exception e) {
 				throw new RuntimeException(e);

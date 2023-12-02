@@ -5,7 +5,6 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
@@ -32,6 +31,9 @@ public class PatchSplitter {
 					classCache.addClass(name, bytes);
 					if (extractClasses) {
 						Path classFile = classesDir.resolve(entry.getName());
+						if (!Files.exists(classFile.getParent())){
+							Files.createDirectories(classFile.getParent());
+						}
 						Files.write(classFile, bytes);
 					}
 				}

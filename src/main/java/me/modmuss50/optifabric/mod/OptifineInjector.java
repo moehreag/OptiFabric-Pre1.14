@@ -32,7 +32,8 @@ public class OptifineInjector {
 	}
 
 	public void setup() {
-		classCache.getClasses().forEach(s -> ClassTinkerers.addReplacement(s.replaceAll("/", ".").substring(0, s.length() - 6), transformer));
+		classCache.getClasses().forEach(s ->
+				ClassTinkerers.addReplacement(s.replaceAll("/", ".").substring(0, s.length() - 6), transformer));
 	}
 
 	//I have no idea why and how this works, if you know better please let me know
@@ -74,7 +75,7 @@ public class OptifineInjector {
 			}
 		}
 
-		// Lets make every class we touch public
+		// Let's make every class we touch public
 		if (!FabricLoader.getInstance().isDevelopmentEnvironment()) {
 			target.access = modAccess(target.access);
 			target.methods.forEach(methodNode -> methodNode.access = modAccess(methodNode.access));
