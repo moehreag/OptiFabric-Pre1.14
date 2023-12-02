@@ -76,7 +76,17 @@ public class OptifineSetup {
 		if (OptifineVersion.jarType == OptifineVersion.JarType.OPTFINE_INSTALLER) {
 			Path optifineMod = versionDir.resolve("Optifine-mod.jar");
 			if (!Files.exists(optifineMod) || Files.size(optifineMod) == 0) {
-				OptifineInstaller.extract(optifineModJar, optifineMod, getMinecraftJar());
+				Path edited = optifineMod.getParent().resolve("Optifine-edited.jar");
+				Files.copy(optifineModJar, edited, StandardCopyOption.REPLACE_EXISTING);
+				String[] filesToDelete = new String[]{"bpo"};
+				try (FileSystem zip = FileSystems.newFileSystem(edited, (ClassLoader) null)) {
+					for (String s : filesToDelete) {
+						Files.deleteIfExists(zip.getPath("patch/"+s+".class.xdelta"));
+						Files.deleteIfExists(zip.getPath("patch/"+s+".class.md5"));
+					}
+				}
+				OptifineInstaller.extract(edited, optifineMod, getMinecraftJar());
+				Files.deleteIfExists(edited);
 			}
 			optifineModJar = optifineMod;
 		}
@@ -148,7 +158,7 @@ public class OptifineSetup {
 		Files.deleteIfExists(extractedMappings);
 		Files.deleteIfExists(fieldMappings);
 
-		boolean extractClasses = true;//Boolean.parseBoolean(System.getProperty("optifabric.extract", "false"));
+		boolean extractClasses = Boolean.parseBoolean(System.getProperty("optifabric.extract", "false"));
 		if (extractClasses) {
 			Optifabric.getLogger().info("Extracting optifine classes");
 			Path optifineClasses = versionDir.resolve("optifine-classes");
@@ -209,6 +219,10 @@ public class OptifineSetup {
 							"renderDistance_OF");
 					out.acceptField(new IMappingProvider.Member("bct", "id", "Ljava/lang/String;"),
 							"id_OF");
+					out.acceptField(new IMappingProvider.Member("bpo$1", "a", "Lbpo;"),
+							"server");
+					out.acceptField(new IMappingProvider.Member("bpo$2", "a", "Lbpo;"),
+							"server");
 				};
 			} catch (Exception e) {
 				throw new RuntimeException(e);
@@ -251,14 +265,14 @@ public class OptifineSetup {
 		}
 	}
 
-	//Gets the offical minecraft jar
+	//Gets the official minecraft jar
 	Path getMinecraftJar() throws FileNotFoundException {
 		String givenJar = System.getProperty("optifabric.mc-jar");
 		if (givenJar != null) {
-			File givenJarFile = new File(givenJar);
+			Path givenJarFile = Paths.get(givenJar);
 
-			if (givenJarFile.exists()) {
-				return givenJarFile.toPath();
+			if (Files.exists(givenJarFile)) {
+				return givenJarFile;
 			} else {
 				System.err.println("Supplied Minecraft jar at " + givenJar + " doesn't exist, falling back");
 			}
@@ -267,10 +281,6 @@ public class OptifineSetup {
 		Path minecraftJar = getLaunchMinecraftJar();
 
 		if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-
-			/*if (Files.isRegularFile(minecraftJar, LinkOption.NOFOLLOW_LINKS)) {
-				return minecraftJar;
-			}*/
 
 			Path officialNames = minecraftJar.resolveSibling(String.format("minecraft-%s-client.jar", OptifineVersion.minecraftVersion));
 

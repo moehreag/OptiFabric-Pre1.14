@@ -36,7 +36,6 @@ dependencies {
 	mappings "net.ornithemc:feather:${project.mappings}"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	implementation 'com.google.guava:guava:23.5-jre'
 	modImplementation "com.github.Chocohead:Fabric-ASM:${project.fabric_asm_version}"
 	include "com.github.Chocohead:Fabric-ASM:${project.fabric_asm_version}"
 

@@ -19,8 +19,8 @@ public class MixinGameOptions {
 
 	@Shadow private File file;
 
-	@SuppressWarnings({"ResultOfMethodCallIgnored", "UnresolvedMixinReference"})
-	@Inject(method = "m_2009088", at = @At("RETURN"), remap = false) //m_2009088 = load
+	@SuppressWarnings({"ResultOfMethodCallIgnored"})
+	@Inject(method = {"m_2009088", "load"}, at = @At("RETURN"), remap = false) //m_2009088 = load
 	private void load(CallbackInfo info) {
 		File optifabricOptions = new File(file.getParent(), "optifabric.txt");
 		if (!optifabricOptions.exists()) {

@@ -15,7 +15,7 @@ import org.apache.commons.lang3.Validate;
 public class ClassCache {
 
 	private byte[] hash;
-	private Map<String, byte[]> classes = new HashMap<>();
+	private final Map<String, byte[]> classes = new HashMap<>();
 
 	public ClassCache(byte[] hash) {
 		this.hash = hash;
